@@ -1,18 +1,17 @@
 // Task 1: Multi-Tier Artist Categorization
-const task1ArtistTotals = listeningData.reduce((acc, song) => {
+const task1ArtistTotal = listeningData.reduce((acc, song) => {
     acc[song.artist] = (acc[song.artist] || 0) + song.streams;
     return acc;
 }, {});
 
-const task1Answer = Object.entries(task1ArtistTotals).map(([artist, totalStreams]) => {
+const task1Answer = Object.entries(task1ArtistTotal).map(([artist, totalStreams]) => {
     const tier = totalStreams >= 10000000
-        ? "Platinum"
-        : totalStreams >= 5000000
-            ? "Gold"
-            : "Silver";
-
+    ? "Platinum"
+    : totalStreams >= 5000000
+    ? "Gold"
+    : "Silver";
     return { artist, totalStreams, tier };
-});
+}).sort((a, b) => b.totalStreams - a.totalStreams);
 
 // Task 2: Genre Performance Metrics
 const task2GroupedByGenre = listeningData.reduce((acc, song) => {
@@ -55,7 +54,7 @@ const task3Windows = listeningData
             startIndex,
             endIndex: startIndex + 3,
             songs: windowSongs.map((song) => song.title),
-            totalScore: Number(totalScore.toFixed(2))
+            totalScore: Number(totalScore)
         };
     });
 
@@ -97,7 +96,8 @@ const task4Answer = Object.entries(task4ArtistGenreMap)
             bestGenreAvgStreams: Number(bestGenreEntry[1].toFixed(2))
         };
     })
-    .filter((artistData) => artistData.genreCount >= 3);
+    .filter((artistData) => artistData.genreCount >= 3)
+    .sort((a, b) => b.genreCount - a.genreCount || b.bestGenreAvgStreams - a.bestGenreAvgStreams);
 
 // Task 5: Premium Playlist Curation Algorithm
 const task5Answer = listeningData
